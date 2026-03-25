@@ -56,8 +56,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 * Display all articles without paging
 					 */
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article article : articleRepository.findAll()) {
-						System.out.println(article);
+					for(Article oneArticle : articleRepository.findAll()) {
+						System.out.println(oneArticle);
 					}
 					option = "";
 					break;
