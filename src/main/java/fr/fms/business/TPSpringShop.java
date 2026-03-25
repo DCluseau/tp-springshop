@@ -2,11 +2,22 @@ package fr.fms.business;
 
 import java.util.Scanner;
 
-public class TPSpringShop {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 
-	public TPSpringShop() {
-		// TODO Auto-generated constructor stub
-	}
+import fr.fms.dao.ArticleRepository;
+import fr.fms.dao.CategoryRepository;
+import fr.fms.entities.Article;
+
+public class TPSpringShop implements CommandLineRunner {
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private ArticleRepository articleRepository;
+	
+	public TPSpringShop() {}
+	
 	public void selectOption() {
 		Scanner scan = new Scanner(System.in);
 		String option = "";
@@ -30,6 +41,9 @@ public class TPSpringShop {
 			option = scan.next();
 			switch(option) {
 				case "1":
+					for(Article article : articleRepository.findAll()) {
+						System.out.println(article);
+					}
 					option = "";
 					break;
 				case "2":
@@ -68,11 +82,18 @@ public class TPSpringShop {
 					option = "";
 			}
 		}
+		scan.close();
 	}
 	public void selectNavigation() {
 		System.out.println("EXIT    pour sortir de la pagination");
 		System.out.println("PREV    pour sortir de la pagination");
 		System.out.println("NEXT    pour sortir de la pagination");
 		System.out.println("PAGE puis 7 pour afficher 7 articles par pages (5 par défaut)");
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

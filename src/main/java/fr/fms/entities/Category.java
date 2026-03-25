@@ -70,7 +70,7 @@ public class Category implements Serializable {
 	 * Article not displayed to avoid errors
 	 */
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + "]";
+		return this.name;
 	}
 	
 }

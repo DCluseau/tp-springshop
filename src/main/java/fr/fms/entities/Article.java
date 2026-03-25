@@ -43,10 +43,10 @@ public class Article implements Serializable {
 		this.category = category;
 	}
 	
-	public Article(String brand, String description, Category category) {
+	public Article(String brand, String description, double price) {
 		this.brand = brand;
 		this.description = description;
-		this.category = category;
+		this.price = price;
 	}
 
 	/**
@@ -107,6 +107,6 @@ public class Article implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Article [id=" + id + ", brand=" + brand + ", description=" + description + ", price=" + price + "]";
+		return this.id + "		" + this.description + "		" + this.brand + "		" + this.price + "	" + this.category;
 	}
 }
