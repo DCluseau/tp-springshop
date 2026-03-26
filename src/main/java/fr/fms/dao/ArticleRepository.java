@@ -9,4 +9,5 @@ import fr.fms.entities.Category;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 	public List<Article> findByCategory(Category category);
+	 
 }
