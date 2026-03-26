@@ -21,12 +21,13 @@ public class TPSpringShopApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ArticleRepository articleRepository;
+	
+	private Scanner scan = new Scanner(System.in);
 	public static void main(String[] args) {
 		SpringApplication.run(TPSpringShopApplication.class, args);
 	}
 	
 	public void selectOption() {
-		Scanner scan = new Scanner(System.in);
 		Long articleId;
 		Article article;
 		String brand;
@@ -196,53 +197,54 @@ public class TPSpringShopApplication implements CommandLineRunner {
 		scan.close();
 	}
 	public void selectNavigation() {
-		Scanner scan = new Scanner(System.in);
 		PageRequest pageable;
 		int pageNb = 0;
 		int pageSize = 5;
 		String menuSelected = "";
-		while(menuSelected != "EXIT") {
+		boolean quit = false;
+		pageable = PageRequest.of(pageNb, pageSize);
+		System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+		for(Article oneArticle : articleRepository.findAll(pageable)) {
+			System.out.println(oneArticle);
+		}
+		while(!quit) {
 			System.out.println("EXIT    pour sortir de la pagination");
 			System.out.println("PREV    pour sortir de la pagination");
 			System.out.println("NEXT    pour sortir de la pagination");
 			System.out.println("PAGE puis 7 pour afficher 7 articles par pages (5 par défaut)");
-			pageable = PageRequest.of(pageNb, pageSize);
-			System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-			for(Article oneArticle : articleRepository.findAll(pageable)) {
-				System.out.println(oneArticle);
-			}
 			menuSelected = scan.next();
 			switch(menuSelected) {
-			case "EXIT":
-				break;
-			case "PREV":
-				pageNb --;
-				pageable = PageRequest.of(pageNb, pageSize);
-				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-				for(Article oneArticle : articleRepository.findAll(pageable)) {
-					System.out.println(oneArticle);
-				}
-				break;
-			case "NEXT":
-				pageNb ++;
-				pageable = PageRequest.of(pageNb, pageSize);
-				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-				for(Article oneArticle : articleRepository.findAll(pageable)) {
-					System.out.println(oneArticle);
-				}
-				break;
-			case "PAGE":
-				System.out.println("Veuillez entrer le nombre de pages à afficher : ");
-				pageSize = scan.nextInt();
-				pageable = PageRequest.of(pageNb, pageSize);
-				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-				for(Article oneArticle : articleRepository.findAll(pageable)) {
-					System.out.println(oneArticle);
-				}
-				break;
+				case "EXIT":
+					quit = true;
+					break;
+				case "PREV":
+					pageNb --;
+					pageable = PageRequest.of(pageNb, pageSize);
+					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+					for(Article oneArticle : articleRepository.findAll(pageable)) {
+						System.out.println(oneArticle);
+					}
+					break;
+				case "NEXT":
+					pageNb ++;
+					pageable = PageRequest.of(pageNb, pageSize);
+					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+					for(Article oneArticle : articleRepository.findAll(pageable)) {
+						System.out.println(oneArticle);
+					}
+					break;
+				case "PAGE":
+					System.out.println("Veuillez entrer le nombre d'articles à afficher : ");
+					pageSize = scan.nextInt();
+					pageNb = 0;
+					pageable = PageRequest.of(pageNb, pageSize);
+					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+					for(Article oneArticle : articleRepository.findAll(pageable)) {
+						System.out.println(oneArticle);
+					}
+					break;
 			}
 		}
-		scan.close();
 	}
 	
 	@Override
