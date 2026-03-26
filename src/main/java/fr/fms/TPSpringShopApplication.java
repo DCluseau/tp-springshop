@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import fr.fms.dao.ArticleRepository;
 import fr.fms.dao.CategoryRepository;
 import fr.fms.entities.Article;
+import fr.fms.entities.Category;
 
 @SpringBootApplication
 public class TPSpringShopApplication implements CommandLineRunner {
@@ -31,6 +32,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 		String description;
 		Double price;
 		Long categoryId;
+		String categoryName;
+		Category category;
 		String option = "";
 		System.out.println("Bienvenue dans notre application de gestion d'articles ! Vivement la couche web parce que...");
 		while(option == "") {
@@ -128,6 +131,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					System.out.println("Veuillez indiquer le nom de la catégorie à ajouter :");
+					categoryName = scan.next();
+					categoryRepository.save(new Category(categoryName));
 					break;
 				case "8":
 					/*
@@ -135,6 +140,9 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					System.out.println("Veuillez indiquer l'identifiant de la catégorie à afficher :");
+					categoryId = scan.nextLong();
+					category = categoryRepository.findById(categoryId).get();
+					System.out.println(category);
 					break;
 				case "9":
 					/*
@@ -142,6 +150,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					System.out.println("Veuillez indiquer l'identifiant de la catégorie à supprimer :");
+					categoryId = scan.nextLong();
+					categoryRepository.deleteById(categoryId);
 					break;
 				case "10":
 					/*
@@ -149,6 +159,13 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					System.out.println("Veuillez indiquer l'identifiant de la catégorie à modifier :");
+					categoryId = scan.nextLong();
+					category = categoryRepository.findById(categoryId).get();
+					System.out.println("Nom actuel de la catégorie : ");
+					System.out.println(category);
+					categoryName = scan.next();
+					category.setName(categoryName);
+					categoryRepository.save(category);
 					break;
 				case "11":
 					/*
@@ -156,6 +173,12 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					System.out.println("Veuillez indiquer l'identifiant de la catégorie pour afficher ses articles :");
+					categoryId = scan.nextLong();
+					category = categoryRepository.findById(categoryId).get();
+					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+					for(Article toDisplay : articleRepository.findByCategory(category)) {
+						System.out.println(toDisplay);
+					}
 					break;
 				case "12":
 					System.out.println("Au revoir.");
