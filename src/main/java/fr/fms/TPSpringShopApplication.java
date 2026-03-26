@@ -93,7 +93,7 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					System.out.println("Veuillez indiquer l'identifiant de l'article à afficher :");
 					articleId = scan.nextLong();
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					System.out.println(articleRepository.findById(articleId));
+					System.out.println(articleRepository.findById(articleId).get());
 					break;
 				case "5":
 					/*
@@ -123,7 +123,10 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					price = scan.nextDouble();
 					System.out.println("Veuillez indiquer la catégorie :");
 					categoryId = scan.nextLong();
-					articleRepository.save(new Article(brand, description, price, categoryRepository.findById(categoryId).get()));
+					article.setBrand(brand);
+					article.setDescription(description);
+					article.setPrice(price);
+					articleRepository.save(article);
 					break;
 				case "7":
 					/*
