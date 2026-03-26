@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.PageRequest;
 
 //import fr.fms.business.TPSpringShop;
 import fr.fms.dao.ArticleRepository;
@@ -69,6 +70,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 * Display all articles with paging
 					 */
 					option = "";
+					this.selectNavigation();
+					
 					break;
 				case "3":
 					/*
@@ -193,10 +196,53 @@ public class TPSpringShopApplication implements CommandLineRunner {
 		scan.close();
 	}
 	public void selectNavigation() {
-		System.out.println("EXIT    pour sortir de la pagination");
-		System.out.println("PREV    pour sortir de la pagination");
-		System.out.println("NEXT    pour sortir de la pagination");
-		System.out.println("PAGE puis 7 pour afficher 7 articles par pages (5 par défaut)");
+		Scanner scan = new Scanner(System.in);
+		PageRequest pageable;
+		int pageNb = 0;
+		int pageSize = 5;
+		String menuSelected = "";
+		while(menuSelected != "EXIT") {
+			System.out.println("EXIT    pour sortir de la pagination");
+			System.out.println("PREV    pour sortir de la pagination");
+			System.out.println("NEXT    pour sortir de la pagination");
+			System.out.println("PAGE puis 7 pour afficher 7 articles par pages (5 par défaut)");
+			pageable = PageRequest.of(pageNb, pageSize);
+			System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+			for(Article oneArticle : articleRepository.findAll(pageable)) {
+				System.out.println(oneArticle);
+			}
+			menuSelected = scan.next();
+			switch(menuSelected) {
+			case "EXIT":
+				break;
+			case "PREV":
+				pageNb --;
+				pageable = PageRequest.of(pageNb, pageSize);
+				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+				for(Article oneArticle : articleRepository.findAll(pageable)) {
+					System.out.println(oneArticle);
+				}
+				break;
+			case "NEXT":
+				pageNb ++;
+				pageable = PageRequest.of(pageNb, pageSize);
+				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+				for(Article oneArticle : articleRepository.findAll(pageable)) {
+					System.out.println(oneArticle);
+				}
+				break;
+			case "PAGE":
+				System.out.println("Veuillez entrer le nombre de pages à afficher : ");
+				pageSize = scan.nextInt();
+				pageable = PageRequest.of(pageNb, pageSize);
+				System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
+				for(Article oneArticle : articleRepository.findAll(pageable)) {
+					System.out.println(oneArticle);
+				}
+				break;
+			}
+		}
+		scan.close();
 	}
 	
 	@Override
