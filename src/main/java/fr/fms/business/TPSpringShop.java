@@ -12,17 +12,19 @@ import fr.fms.entities.Article;
 public class TPSpringShop implements CommandLineRunner {
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	private ArticleRepository articleRepository;
-	
-	public TPSpringShop() {}
-	
+
+	public TPSpringShop() {
+	}
+
 	public void selectOption() {
 		Scanner scan = new Scanner(System.in);
 		String option = "";
-		System.out.println("Bienvenue dans notre application de gestion d'articles ! Vivement la couche web parce que...");
-		while(option == "") {
+		System.out.println(
+				"Bienvenue dans notre application de gestion d'articles ! Vivement la couche web parce que...");
+		while (option == "") {
 			System.out.println("1: Afficher tous les articles sans pagination");
 			System.out.println("2: Afficher tous les articles avec pagination");
 			System.out.println("*********************************************");
@@ -39,9 +41,9 @@ public class TPSpringShop implements CommandLineRunner {
 			System.out.println("*********************************************");
 			System.out.println("12: Sortir du programme");
 			option = scan.next();
-			switch(option) {
+			switch (option) {
 				case "1":
-					for(Article article : articleRepository.findAll()) {
+					for (Article article : articleRepository.findAll()) {
 						System.out.println(article);
 					}
 					option = "";
@@ -78,12 +80,13 @@ public class TPSpringShop implements CommandLineRunner {
 					break;
 				case "12":
 					break;
-				default :
+				default:
 					option = "";
 			}
 		}
 		scan.close();
 	}
+
 	public void selectNavigation() {
 		System.out.println("EXIT    pour sortir de la pagination");
 		System.out.println("PREV    pour sortir de la pagination");
@@ -93,7 +96,6 @@ public class TPSpringShop implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-		
+
 	}
 }

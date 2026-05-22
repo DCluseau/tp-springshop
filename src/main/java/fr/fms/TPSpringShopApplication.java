@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.PageRequest;
 
-//import fr.fms.business.TPSpringShop;
 import fr.fms.dao.ArticleRepository;
 import fr.fms.dao.CategoryRepository;
 import fr.fms.entities.Article;
@@ -18,15 +17,22 @@ import fr.fms.entities.Category;
 public class TPSpringShopApplication implements CommandLineRunner {
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	private ArticleRepository articleRepository;
-	
+
 	private Scanner scan = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		SpringApplication.run(TPSpringShopApplication.class, args);
 	}
-	
+
+	public void addCategory(Scanner scan) {
+		System.out.println("Veuillez indiquer le nom de la catégorie à ajouter :");
+		String categoryName = scan.next();
+		categoryRepository.save(new Category(categoryName));
+	}
+
 	public void selectOption() {
 		Long articleId;
 		Article article;
@@ -37,8 +43,9 @@ public class TPSpringShopApplication implements CommandLineRunner {
 		String categoryName;
 		Category category;
 		String option = "";
-		System.out.println("Bienvenue dans notre application de gestion d'articles ! Vivement la couche web parce que...");
-		while(option == "") {
+		System.out.println(
+				"Bienvenue dans notre application de gestion d'articles ! Vivement la couche web parce que...");
+		while (option == "") {
 			System.out.println("1: Afficher tous les articles sans pagination");
 			System.out.println("2: Afficher tous les articles avec pagination");
 			System.out.println("*********************************************");
@@ -55,13 +62,13 @@ public class TPSpringShopApplication implements CommandLineRunner {
 			System.out.println("*********************************************");
 			System.out.println("12: Sortir du programme");
 			option = scan.next();
-			switch(option) {
+			switch (option) {
 				case "1":
 					/*
 					 * Display all articles without paging
 					 */
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article oneArticle : articleRepository.findAll()) {
+					for (Article oneArticle : articleRepository.findAll()) {
 						System.out.println(oneArticle);
 					}
 					option = "";
@@ -72,7 +79,7 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					 */
 					option = "";
 					this.selectNavigation();
-					
+
 					break;
 				case "3":
 					/*
@@ -87,7 +94,8 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					price = scan.nextDouble();
 					System.out.println("Veuillez indiquer la catégorie :");
 					categoryId = scan.nextLong();
-					articleRepository.save(new Article(brand, description, price, categoryRepository.findById(categoryId).get()));
+					articleRepository.save(
+							new Article(brand, description, price, categoryRepository.findById(categoryId).get()));
 					break;
 				case "4":
 					/*
@@ -183,19 +191,20 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					categoryId = scan.nextLong();
 					category = categoryRepository.findById(categoryId).get();
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article toDisplay : articleRepository.findByCategory(category)) {
+					for (Article toDisplay : articleRepository.findByCategory(category)) {
 						System.out.println(toDisplay);
 					}
 					break;
 				case "12":
 					System.out.println("Au revoir.");
 					break;
-				default :
+				default:
 					option = "";
 			}
 		}
 		scan.close();
 	}
+
 	public void selectNavigation() {
 		PageRequest pageable;
 		int pageNb = 0;
@@ -204,32 +213,32 @@ public class TPSpringShopApplication implements CommandLineRunner {
 		boolean quit = false;
 		pageable = PageRequest.of(pageNb, pageSize);
 		System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-		for(Article oneArticle : articleRepository.findAll(pageable)) {
+		for (Article oneArticle : articleRepository.findAll(pageable)) {
 			System.out.println(oneArticle);
 		}
-		while(!quit) {
+		while (!quit) {
 			System.out.println("EXIT    pour sortir de la pagination");
 			System.out.println("PREV    pour sortir de la pagination");
 			System.out.println("NEXT    pour sortir de la pagination");
 			System.out.println("PAGE puis 7 pour afficher 7 articles par pages (5 par défaut)");
 			menuSelected = scan.next();
-			switch(menuSelected) {
+			switch (menuSelected) {
 				case "EXIT":
 					quit = true;
 					break;
 				case "PREV":
-					pageNb --;
+					pageNb--;
 					pageable = PageRequest.of(pageNb, pageSize);
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article oneArticle : articleRepository.findAll(pageable)) {
+					for (Article oneArticle : articleRepository.findAll(pageable)) {
 						System.out.println(oneArticle);
 					}
 					break;
 				case "NEXT":
-					pageNb ++;
+					pageNb++;
 					pageable = PageRequest.of(pageNb, pageSize);
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article oneArticle : articleRepository.findAll(pageable)) {
+					for (Article oneArticle : articleRepository.findAll(pageable)) {
 						System.out.println(oneArticle);
 					}
 					break;
@@ -239,32 +248,32 @@ public class TPSpringShopApplication implements CommandLineRunner {
 					pageNb = 0;
 					pageable = PageRequest.of(pageNb, pageSize);
 					System.out.println("IDENTIFIANT	DESCRIPTION	MARQUE		PRIX	CATEGORIE");
-					for(Article oneArticle : articleRepository.findAll(pageable)) {
+					for (Article oneArticle : articleRepository.findAll(pageable)) {
 						System.out.println(oneArticle);
 					}
 					break;
 			}
 		}
 	}
-	
+
 	@Override
-	public void run(String...args) throws Exception{
+	public void run(String... args) throws Exception {
 		/*
 		 * Create categories and articles
 		 */
-//		Category smartphone = categoryRepository.save(new Category("Smartphone"));
-//		Category tablet = categoryRepository.save(new Category("Tablet"));
-//		Category pc = categoryRepository.save(new Category("PC"));
-//		
-//		articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
-//		articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
-//		articleRepository.save(new Article("Xiaomi", "MI10", 100, smartphone));
-//		
-//		articleRepository.save(new Article("Samsung", "GalaxyTab", 450, tablet));
-//		articleRepository.save(new Article("Apple", "Ipad", 450, tablet));
-//		
-//		articleRepository.save(new Article("Asus", "R510", 600, pc));
-		
+		// Category smartphone = categoryRepository.save(new Category("Smartphone"));
+		// Category tablet = categoryRepository.save(new Category("Tablet"));
+		// Category pc = categoryRepository.save(new Category("PC"));
+		//
+		// articleRepository.save(new Article("Samsung", "S10", 500, smartphone));
+		// articleRepository.save(new Article("Samsung", "S9", 350, smartphone));
+		// articleRepository.save(new Article("Xiaomi", "MI10", 100, smartphone));
+		//
+		// articleRepository.save(new Article("Samsung", "GalaxyTab", 450, tablet));
+		// articleRepository.save(new Article("Apple", "Ipad", 450, tablet));
+		//
+		// articleRepository.save(new Article("Asus", "R510", 600, pc));
+
 		this.selectOption();
 	}
 }
