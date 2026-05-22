@@ -99,8 +99,8 @@ class ApplicationTests {
 	// }
 
 	@Test
-	@DisplayName("searchArticles - Doit retourner les résultats trouvés")
-	public void searchArticles_ShouldReturnList_WhenBrandMatch() {
+	@DisplayName("Article - findByBrandContains : Doit retourner les résultats trouvés")
+	public void findByBrandContains_ShouldReturnList_WhenBrandMatch() {
 
 		// Mocking du résultat de la recherche dans mockArticles
 		// (en vrai on peut mettre n'importe quoi dans ces enregistrements tant qu'il y
@@ -123,6 +123,21 @@ class ApplicationTests {
 		assertThat(results).hasSize(2);
 		// Assertion que l'enregistrement 0 a bien un brand = Asus
 		assertThat(results.get(0).getBrand()).isEqualTo("Asus");
+	}
+
+	@Test
+	@DisplayName("Article - findByCategory : doit renvoyer la bonne catégorie")
+	public void findByCategory_ShouldReturnListOfArticlesOfTheCategory() {
+		Category mockCategory = new Category("PC");
+		List<Article> mockArticles = Arrays.asList(
+				new Article("Asus", "Laptop", 500.0, mockCategory),
+				new Article("HP", "Tour", 1200, mockCategory));
+		when(articleRepository.findByCategory(mockCategory))
+				.thenReturn(mockArticles);
+		List<Article> results = articleRepository.findByCategory(mockCategory);
+		assertThat(results).hasSize(2);
+		assertThat(results.get(0).getCategory()).isEqualTo(mockCategory);
+		assertThat(results.get(0).getCategory().getName()).isEqualTo("PC");
 	}
 
 }

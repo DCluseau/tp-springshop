@@ -104,6 +104,13 @@ public class Article implements Serializable {
 		this.price = price;
 	}
 
+	/**
+	 * @return the category
+	 */
+	public Category getCategory() {
+		return this.category;
+	}
+
 	@Override
 	public String toString() {
 		return this.id + "		" + this.description + "		" + this.brand + "		" + this.price + "	"
